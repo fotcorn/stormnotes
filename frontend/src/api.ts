@@ -3,7 +3,7 @@ import { Message } from 'element-ui';
 import jwtDecode from 'jwt-decode';
 import { endsWith } from 'lodash';
 
-import store from '@/store';
+import store from '@/store/index';
 import router from '@/router';
 
 const LOGIN_URL = 'token/';
