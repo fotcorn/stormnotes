@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'backend',
+
+    'backend.apps.BackendConfig',
 ]
 if DEBUG:
     INSTALLED_APPS += ['django_extensions']
