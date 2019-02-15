@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
 import jwtDecode from 'jwt-decode';
-import endsWith from 'lodash.endswith';
+import { endsWith } from 'lodash';
 
 import store from '@/store';
 import router from '@/router';
