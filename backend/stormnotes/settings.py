@@ -1,5 +1,7 @@
 import os
 import environ
+from datetime import timedelta
+
 env = environ.Env()
 if os.path.exists('.env'):
     environ.Env.read_env('.env')
@@ -115,6 +117,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static'
+
+REST_FRAMEWORK = {
+    # all api reviews require authentication by default
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    # generate a new refresh token when the access token is refreshed
+    # this way a user newer gets logged out if logs in at least every
+    # REFRESH_TOKEN_LIFETIME days
+    'ROTATE_REFRESH_TOKENS': True,
+}
 
 # logging
 LOGGING = {
