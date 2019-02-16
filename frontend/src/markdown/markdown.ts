@@ -1,7 +1,12 @@
-const md = require('markdown-it')({ breaks: true, linkify: true })
-  .use(require('markdown-it-highlightjs'))
-  .use(require('./markdown-it-checkbox'))
-  .use(require('./markdown-it-link'));
+import markdownIt from 'markdown-it';
+import highlightjs from 'markdown-it-highlightjs';
+import checkbox from './markdown-it-checkbox';
+import link from './markdown-it-link';
+
+const md = markdownIt({ breaks: true, linkify: true })
+  .use(highlightjs)
+  .use(checkbox)
+  .use(link);
 
 export default function render(markdown: string, currentPage: string): string {
   md.context = { currentPage };

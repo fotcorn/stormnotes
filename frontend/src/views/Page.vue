@@ -19,14 +19,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-//import renderMarkdown from '../markdown/markdown';
+import renderMarkdown from '../markdown/markdown';
 
 @Component({})
 export default class Home extends Vue {
-  markdown = '';
+  private markdown = '';
   get html() {
-    return this.markdown;
-    //return renderMarkdown(this.markdown, '');
+    return renderMarkdown(this.markdown, '');
   }
 }
 </script>

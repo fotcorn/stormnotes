@@ -23,55 +23,56 @@
 import { createNamespacedHelpers } from 'vuex';
 import { login, handleAPIError } from '../api';
 import router from '../router';
+import { Vue, Component } from 'vue-property-decorator';
+
 const { mapActions } = createNamespacedHelpers('auth');
-export default {
-  data() {
-    return {
-      form: {
-        username: '',
-        password: '',
+
+
+@Component({})
+export default class Login extends Vue {
+  private form = {
+    username: '',
+    password: '',
+  }
+  private rules = {
+    username: [
+      {
+        required: true,
+        message: 'This field is required',
+        trigger: 'change',
       },
-      rules: {
-        username: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'change',
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'change',
-          },
-        ],
+    ],
+    password: [
+      {
+        required: true,
+        message: 'This field is required',
+        trigger: 'change',
       },
-      error: false,
-    };
-  },
-  methods: {
-    ...mapActions(['login']),
-    async submit() {
-      this.error = false;
-      try {
-        await this.$refs.form.validate();
-      } catch (e) {
-        return;
-      }
-      let success = null;
-      try {
-        success = await login(this.form.username, this.form.password);
-      } catch (e) {
-        handleAPIError(e);
-      }
-      if (success) {
-        router.push({ name: 'CustomerList' });
-      } else {
-        this.error = true;
-      }
-    },
-  },
+    ],
+  }
+  private error = false
+
+  ...mapActions(['login'])
+
+  async submit() {
+    this.error = false;
+    try {
+      await this.$refs.form.validate();
+    } catch (e) {
+      return;
+    }
+    let success = null;
+    try {
+      success = await login(this.form.username, this.form.password);
+    } catch (e) {
+      handleAPIError(e);
+    }
+    if (success) {
+      router.push({ name: 'CustomerList' });
+    } else {
+      this.error = true;
+    }
+  }
 };
 </script>
 
