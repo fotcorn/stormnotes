@@ -7,20 +7,26 @@ export default {
     refreshToken: null,
   },
   getters: {
-    accessTokenValid(state) {
+    accessTokenValid(state: any) {
       return isJWTValid(state.accessToken);
     },
-    refreshTokenValid(state) {
+    refreshTokenValid(state: any) {
       return isJWTValid(state.refreshToken);
     },
   },
   actions: {
-    login({ commit }, data) {
+    login({ commit }: { commit: any }, data: any) {
       commit('loginMutation', data);
     },
   },
   mutations: {
-    loginMutation(state, { accessToken, refreshToken }) {
+    loginMutation(
+      state: any,
+      {
+        accessToken,
+        refreshToken,
+      }: { accessToken: string; refreshToken: string }
+    ) {
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
     },

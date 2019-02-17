@@ -25,15 +25,12 @@ import { login, handleAPIError } from '../api';
 import router from '../router';
 import { Vue, Component } from 'vue-property-decorator';
 
-const { mapActions } = createNamespacedHelpers('auth');
-
-
 @Component({})
 export default class Login extends Vue {
   private form = {
     username: '',
     password: '',
-  }
+  };
   private rules = {
     username: [
       {
@@ -49,12 +46,10 @@ export default class Login extends Vue {
         trigger: 'change',
       },
     ],
-  }
-  private error = false
+  };
+  private error = false;
 
-  ...mapActions(['login'])
-
-  async submit() {
+  private async submit() {
     this.error = false;
     try {
       await this.$refs.form.validate();
@@ -73,7 +68,7 @@ export default class Login extends Vue {
       this.error = true;
     }
   }
-};
+}
 </script>
 
 <style lang="sass" scoped>

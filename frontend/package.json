@@ -23,6 +23,8 @@
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
+    "@types/jwt-decode": "^2.2.1",
+    "@types/lodash": "^4.14.121",
     "@types/markdown-it": "^0.0.7",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-typescript": "^3.4.0",

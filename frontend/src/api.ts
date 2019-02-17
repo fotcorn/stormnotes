@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Message } from 'element-ui';
 import jwtDecode from 'jwt-decode';
 import { endsWith } from 'lodash';
@@ -58,15 +58,15 @@ export async function refreshToken() {
   return true;
 }
 
-export function isJWTValid(token) {
+export function isJWTValid(token: string) {
   if (!token) {
     return false;
   }
 
-  let data = null;
+  let data: { exp: number } | null = null;
   try {
     data = jwtDecode(token);
-    const tokenDate = new Date(data.exp * 1000);
+    const tokenDate = new Date(data!.exp * 1000);
     const now = new Date();
     return tokenDate > now;
   } catch (e) {
@@ -76,7 +76,7 @@ export function isJWTValid(token) {
 
 const LOGIN_ERROR_MESSAGE = 'login';
 
-export function handleAPIError(error) {
+export function handleAPIError(error: AxiosError) {
   // do not show error message when error comes from a redirect to login
   if (error.message && error.message === LOGIN_ERROR_MESSAGE) {
     return;
