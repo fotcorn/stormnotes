@@ -9,6 +9,5 @@ const md = markdownIt({ breaks: true, linkify: true })
   .use(link);
 
 export default function render(markdown: string, currentPage: string): string {
-  md.context = { currentPage };
-  return md.render(markdown);
+  return md.render(markdown, { currentPage });
 }
