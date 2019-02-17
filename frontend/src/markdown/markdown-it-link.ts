@@ -1,16 +1,14 @@
 // based on https://github.com/markdown-it/markdown-it-sup/blob/master/index.js
 
-'use strict';
-
 // same as UNESCAPE_MD_RE plus a space
-var UNESCAPE_RE = /\\([ \\!"#$%&'()*+,.\/:;<=>?@[\]^_`{|}~-])/g;
+const UNESCAPE_RE = /\\([ \\!"#$%&'()*+,.\/:;<=>?@[\]^_`{|}~-])/g;
 
-function linkify(state, silent) {
-  var found,
-    content,
-    token,
-    max = state.posMax,
-    start = state.pos;
+function linkify(state: any, silent: boolean) {
+  let found;
+  let content;
+  let token;
+  const max = state.posMax;
+  const start = state.pos;
 
   if (state.src.charCodeAt(start) !== 0x5b /* [ */) {
     return false;
@@ -80,6 +78,6 @@ function linkify(state, silent) {
   return true;
 }
 
-module.exports = function sup_plugin(md) {
+export default function sup_plugin(md: any) {
   md.inline.ruler.after('emphasis', 'link', linkify);
-};
+}
