@@ -4,6 +4,7 @@
       <template v-if="index !== components.length - 1">
         <router-link
           :to="{ name: 'page', params: { page: component.path } }"
+          class="link"
         >{{ component.component }}</router-link>
         <span>:</span>
       </template>
@@ -32,3 +33,11 @@ export default class PageTitle extends Vue {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.link
+  color: #ff4081
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+</style>
