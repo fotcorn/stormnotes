@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import './styles.scss';
 import './global.sass';
 import 'codemirror/lib/codemirror.css';
+import 'katex/dist/katex.min.css';
 
 Vue.use(ElementUI);
 
