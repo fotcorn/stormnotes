@@ -8,7 +8,7 @@ r = RedisStore()
 
 @csrf_exempt
 def page(request, page_name):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponseForbidden()
 
     if request.method == 'POST':

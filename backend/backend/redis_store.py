@@ -1,10 +1,12 @@
 import redis
+from django.conf import settings
 
 
 class RedisStore(object):
 
     def __init__(self):
-        self.r = redis.StrictRedis(host='localhost', port=6379, db=0)
+        host, port = settings.REDIS_URL.netloc.split(':')
+        self.r = redis.StrictRedis(host=host, port=port, db=0)
 
     def init(self):
         self.r.set('pages_pk_counter', 0)
