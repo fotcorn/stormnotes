@@ -12,6 +12,8 @@ django = "*"
 whitenoise = "*"
 psycopg2-binary = "*"
 django-environ = "*"
+djangorestframework-simplejwt = "*"
+redis = "*"
 
 [requires]
 python_version = "3.7"
