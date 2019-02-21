@@ -70,7 +70,7 @@ function linkify(state: any, silent: boolean) {
   token = state.push('text', '', 0);
   token.content = content.replace(UNESCAPE_RE, '$1');
 
-  token = state.push('link_close', 'a', -1);
+  token = state.push('link_close', 'span', -1);
   token.markup = '^';
 
   state.pos = state.posMax + 1;
