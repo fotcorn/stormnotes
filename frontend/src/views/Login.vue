@@ -63,7 +63,7 @@ export default class Login extends Vue {
       handleAPIError(e);
     }
     if (success) {
-      router.push({ name: 'CustomerList' });
+      router.push({ name: 'page', params: { page: 'index' } });
     } else {
       this.error = true;
     }

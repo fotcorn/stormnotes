@@ -22,6 +22,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import renderMarkdown from '../markdown/markdown';
 import PageTitle from '@/components/PageTitle.vue';
+import HTTP, { handleAPIError } from '@/api';
 
 @Component({
   components: {
@@ -37,6 +38,19 @@ export default class Home extends Vue {
 
   get pageName() {
     return this.$route.params.page;
+  }
+
+  public async mounted() {
+    let response = null;
+    try {
+      response = await HTTP.get(`/pages/${this.pageName}`);
+    } catch (e) {
+      handleAPIError(e);
+      return;
+    }
+    if (response.data.text) {
+      this.markdown = response.data.text;
+    }
   }
 }
 </script>
