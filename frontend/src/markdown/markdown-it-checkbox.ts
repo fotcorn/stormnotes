@@ -1,25 +1,22 @@
 // source: https://github.com/mcecot/markdown-it-checkbox/blob/master/index.js
 // changes: disable checkbox on line 39
 
-var _, checkboxReplace;
+import { extend } from 'lodash';
 
-_ = require('underscore');
-
-checkboxReplace = function(md, options, Token) {
-  'use strict';
-  var arrayReplaceAt, createTokens, defaults, lastId, pattern, splitTextToken;
-  arrayReplaceAt = md.utils.arrayReplaceAt;
-  lastId = 0;
-  defaults = {
+function checkboxReplace(md: any, options: any, Token: any) {
+  const arrayReplaceAt = md.utils.arrayReplaceAt;
+  let lastId = 0;
+  const defaults = {
     divWrap: false,
     divClass: 'checkbox',
     idPrefix: 'checkbox',
   };
-  options = _.extend(defaults, options);
-  pattern = /\[(X|\s|\_|\-)\]\s(.*)/i;
-  createTokens = function(checked, label, Token) {
-    var id, nodes, token;
-    nodes = [];
+  options = extend(defaults, options);
+  const pattern = /\[(X|\s|\_|\-)\]\s(.*)/i;
+
+  const createTokens = (checked: boolean, label: string, Token: any) => {
+    let token;
+    const nodes = [];
 
     /**
      * <div class="checkbox">
@@ -33,7 +30,7 @@ checkboxReplace = function(md, options, Token) {
     /**
      * <input type="checkbox" id="checkbox{n}" checked="true">
      */
-    id = options.idPrefix + lastId;
+    const id = options.idPrefix + lastId;
     lastId += 1;
     token = new Token('checkbox_input', 'input', 0);
     token.attrs = [['type', 'checkbox'], ['id', id], ['disabled', 'disabled']];
@@ -65,7 +62,7 @@ checkboxReplace = function(md, options, Token) {
     }
     return nodes;
   };
-  splitTextToken = function(original, Token) {
+  const splitTextToken = (original: any, Token: any) => {
     var checked, label, matches, text, value;
     text = original.content;
     matches = text.match(pattern);
@@ -80,7 +77,7 @@ checkboxReplace = function(md, options, Token) {
     }
     return createTokens(checked, label, Token);
   };
-  return function(state) {
+  return function(state: any) {
     var blockTokens, i, j, l, token, tokens;
     blockTokens = state.tokens;
     j = 0;
@@ -104,11 +101,10 @@ checkboxReplace = function(md, options, Token) {
       j++;
     }
   };
-};
+}
 
 /*global module */
 
-module.exports = function(md, options) {
-  'use strict';
+export default function(md: any, options: any) {
   md.core.ruler.push('checkbox', checkboxReplace(md, options));
-};
+}
