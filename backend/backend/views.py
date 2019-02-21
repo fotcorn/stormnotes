@@ -1,19 +1,17 @@
 import json
-from django.http.response import JsonResponse, HttpResponseForbidden
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .redis_store import RedisStore
 
 r = RedisStore()
 
 
-@csrf_exempt
-def page(request, page_name):
-    if not request.user.is_authenticated:
-        return HttpResponseForbidden()
+class Page(APIView):
 
-    if request.method == 'POST':
+    def get(self, request, page_name):
+        return Response({'text': r.get_page(request.user.pk, page_name)})
+
+    def post(self, request, page_name):
         data = json.loads(request.body)
         r.set_page(request.user.pk, page_name, data['text'])
-        return JsonResponse({'status': 'ok'})
-    else:
-        return JsonResponse({'text': r.get_page(request.user.pk, page_name)})
+        return Response({'status': 'ok'})
