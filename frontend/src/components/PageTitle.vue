@@ -1,10 +1,13 @@
 <template>
   <h1>
     <span v-for="(component, index) in components" :key="index">
-      <span v-if="index !== components.length - 1">
-        <a :href="'/wiki/' + component.path">{{ component.component }}</a>:
-      </span>
-      <span v-else>{{ component.component }}</span>
+      <template v-if="index !== components.length - 1">
+        <router-link
+          :to="{ name: 'page', params: { page: component.path } }"
+        >{{ component.component }}</router-link>
+        <span>:</span>
+      </template>
+      <template v-else>{{ component.component }}</template>
     </span>
   </h1>
 </template>
