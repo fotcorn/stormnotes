@@ -40,7 +40,7 @@ export async function refreshToken() {
   let response = null;
   try {
     response = await http.post(REFRESH_URL, {
-      refresh: store.state.auth.refreshToken,
+      refresh: (store.state as any).auth.refreshToken,
     });
   } catch (error) {
     if (error.response.status === 401) {
@@ -119,7 +119,7 @@ http.interceptors.request.use(
       // if the refresh is successful, the store now has a valid access token and we can use it to do the request
       // if not, the user will be redirected to the login view
     }
-    config.headers.Authorization = 'Bearer ' + store.state.auth.accessToken;
+    config.headers.Authorization = 'Bearer ' + (store.state as any).auth.accessToken;
     return config;
   },
   error => {

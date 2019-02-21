@@ -39,7 +39,7 @@ function linkify(state: any, silent: boolean) {
   content = state.src.slice(start + 1, state.pos);
 
   // skip completed checkboxes [x]
-  if (content == 'x') {
+  if (content === 'x') {
     state.pos = start;
     return false;
   }
@@ -50,7 +50,7 @@ function linkify(state: any, silent: boolean) {
     return false;
   }
 
-  if (content.charAt(0) == ':') {
+  if (content.charAt(0) === ':') {
     content = state.md.context.currentPage + content;
   }
 

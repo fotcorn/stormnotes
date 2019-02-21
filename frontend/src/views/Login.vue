@@ -52,7 +52,7 @@ export default class Login extends Vue {
   private async submit() {
     this.error = false;
     try {
-      await this.$refs.form.validate();
+      await (this.$refs.form as any).validate();
     } catch (e) {
       return;
     }

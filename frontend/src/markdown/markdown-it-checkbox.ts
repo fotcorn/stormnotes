@@ -3,7 +3,7 @@
 
 import { extend } from 'lodash';
 
-function checkboxReplace(md: any, options: any, Token: any) {
+function checkboxReplace(md: any, options: any) {
   const arrayReplaceAt = md.utils.arrayReplaceAt;
   let lastId = 0;
   const defaults = {
@@ -63,34 +63,32 @@ function checkboxReplace(md: any, options: any, Token: any) {
     return nodes;
   };
   const splitTextToken = (original: any, Token: any) => {
-    var checked, label, matches, text, value;
-    text = original.content;
-    matches = text.match(pattern);
+    const text = original.content;
+    const matches = text.match(pattern);
     if (matches === null) {
       return original;
     }
-    checked = false;
-    value = matches[1];
-    label = matches[2];
+    let checked = false;
+    const value = matches[1];
+    const label = matches[2];
     if (value === 'X' || value === 'x') {
       checked = true;
     }
     return createTokens(checked, label, Token);
   };
-  return function(state: any) {
-    var blockTokens, i, j, l, token, tokens;
-    blockTokens = state.tokens;
-    j = 0;
-    l = blockTokens.length;
+  return (state: any) => {
+    const blockTokens = state.tokens;
+    let j = 0;
+    const l = blockTokens.length;
     while (j < l) {
       if (blockTokens[j].type !== 'inline') {
         j++;
         continue;
       }
-      tokens = blockTokens[j].children;
-      i = tokens.length - 1;
+      let tokens = blockTokens[j].children;
+      let i = tokens.length - 1;
       while (i >= 0) {
-        token = tokens[i];
+        const token = tokens[i];
         blockTokens[j].children = tokens = arrayReplaceAt(
           tokens,
           i,
