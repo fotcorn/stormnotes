@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Page.vue';
+import Page from './views/Page.vue';
 import Login from './views/Login.vue';
 
 Vue.use(Router);
@@ -11,8 +11,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      redirect: '/wiki/index',
+    },
+    {
+      path: '/wiki/:page(.+)',
+      name: 'page',
+      component: Page,
     },
     {
       path: '/login',
