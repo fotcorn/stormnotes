@@ -1,14 +1,14 @@
 <template>
-  <el-container class="height100p">
-    <el-main class="height100p">
+  <el-container>
+    <el-main>
       <page-title :title="pageName"/>
-      <el-row :gutter="10" class="height100p">
-        <el-col :span="12" class="height100p">
+      <el-row :gutter="10" style="display: flex">
+        <el-col :span="12">
           <el-card class="height100p">
             <div v-html="html" class="html"></div>
           </el-card>
         </el-col>
-        <el-col :span="12" class="height100p">
+        <el-col :span="12">
           <el-card class="height100p">
             <codemirror v-model="markdown" :options="codeMirrorOptions"/>
           </el-card>
@@ -125,4 +125,6 @@ export default class Home extends Vue {
   cursor: pointer
   &:hover
     text-decoration: underline
+.vue-codemirror .CodeMirror
+  height: auto
 </style>
