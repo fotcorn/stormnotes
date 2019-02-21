@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import renderMarkdown from '../markdown/markdown';
 import PageTitle from '@/components/PageTitle.vue';
 import HTTP, { handleAPIError } from '@/api';
@@ -31,6 +31,7 @@ import HTTP, { handleAPIError } from '@/api';
 })
 export default class Home extends Vue {
   private markdown = '';
+  private dirty = false;
 
   get html() {
     return renderMarkdown(this.markdown, '');
@@ -51,6 +52,20 @@ export default class Home extends Vue {
     if (response.data.text) {
       this.markdown = response.data.text;
     }
+
+    window.setInterval(async () => {
+      if (this.dirty) {
+        await HTTP.post(`/pages/${this.pageName}/`, {
+          text: this.markdown,
+        });
+        this.dirty = false;
+      }
+    }, 2000);
+  }
+
+  @Watch('markdown')
+  public onMarkdownChange() {
+    this.dirty = true;
   }
 }
 </script>
