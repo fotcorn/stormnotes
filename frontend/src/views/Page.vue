@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="12" class="height100p">
           <el-card class="height100p">
-            <el-input type="textarea" autosize v-model="markdown"/>
+            <codemirror v-model="markdown" :options="codeMirrorOptions"/>
           </el-card>
         </el-col>
       </el-row>
@@ -23,10 +23,12 @@ import { Vue, Component, Watch } from 'vue-property-decorator';
 import renderMarkdown from '../markdown/markdown';
 import PageTitle from '@/components/PageTitle.vue';
 import HTTP, { handleAPIError } from '@/api';
+import { codemirror } from 'vue-codemirror';
 
 @Component({
   components: {
     PageTitle,
+    codemirror,
   },
 })
 export default class Home extends Vue {
@@ -98,6 +100,16 @@ export default class Home extends Vue {
   @Watch('markdown')
   public onMarkdownChange() {
     this.dirty = true;
+  }
+
+  get codeMirrorOptions() {
+    return {
+      tabSize: 2,
+      extraKeys: {
+        Tab: 'indentMore',
+        'Shift-Tab': 'indentLess',
+      },
+    };
   }
 }
 </script>
