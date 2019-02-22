@@ -51,7 +51,7 @@ function linkify(state: any, silent: boolean) {
   }
 
   if (content.charAt(0) === ':') {
-    content = state.md.context.currentPage + content;
+    content = state.md.options.currentPage + content;
   }
 
   // found!

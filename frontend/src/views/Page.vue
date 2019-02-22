@@ -37,7 +37,7 @@ export default class Home extends Vue {
   private interval: number | null = null;
 
   get html() {
-    return renderMarkdown(this.markdown, '');
+    return renderMarkdown(this.markdown, this.$route.params.page);
   }
 
   get pageName() {

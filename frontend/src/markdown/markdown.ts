@@ -11,5 +11,6 @@ const md = markdownIt({ breaks: true, linkify: true })
   .use(katex);
 
 export default function render(markdown: string, currentPage: string): string {
-  return md.render(markdown, { currentPage });
+  md.set({ currentPage } as any);
+  return md.render(markdown);
 }
