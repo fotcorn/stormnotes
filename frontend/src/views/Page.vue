@@ -130,12 +130,22 @@ export default class Home extends Vue {
   height: auto
 
 .html
+  // code block formatting from highlight.js
   pre
     background-color: #F8F8F8
     border: 1px solid #CCC
     border-radius: 3px
     padding: 5px
-
     code
       padding: 0
+
+  // table formatting
+  table
+    width: 100%
+  table, tr, td, th
+    text-align: left
+    border: 1px solid grey
+    border-collapse: collapse
+  td, th
+    padding: 5px
 </style>
