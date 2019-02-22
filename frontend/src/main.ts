@@ -8,6 +8,7 @@ import './styles.scss';
 import './global.sass';
 import 'codemirror/lib/codemirror.css';
 import 'katex/dist/katex.min.css';
+import 'highlight.js/styles/github.css';
 
 Vue.use(ElementUI);
 

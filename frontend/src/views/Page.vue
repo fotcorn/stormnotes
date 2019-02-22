@@ -125,6 +125,17 @@ export default class Home extends Vue {
   cursor: pointer
   &:hover
     text-decoration: underline
+
 .vue-codemirror .CodeMirror
   height: auto
+
+.html
+  pre
+    background-color: #F8F8F8
+    border: 1px solid #CCC
+    border-radius: 3px
+    padding: 5px
+
+    code
+      padding: 0
 </style>
