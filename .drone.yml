@@ -2,4 +2,5 @@ pipeline:
   docker:
     image: plugins/docker
     repo: registry.fotcorn.ch/stormnotes/stormnotes
+    registry: registry.fotcorn.ch
 secrets: [docker_username, docker_password]
