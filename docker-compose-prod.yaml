@@ -12,6 +12,7 @@ services:
   redis:
     image: redis:alpine
     command: redis-server --appendonly yes
+    restart: unless-stopped
     volumes:
       - ./redis-data:/data
 
