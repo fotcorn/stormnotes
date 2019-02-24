@@ -66,7 +66,7 @@ export default class Home extends Vue {
   public async init(pageName: string) {
     let response = null;
     try {
-      response = await HTTP.get(`/pages/${pageName}`);
+      response = await HTTP.get(`/pages/${pageName}/`);
     } catch (e) {
       handleAPIError(e);
       return;
