@@ -15,7 +15,7 @@ class RedisStore(object):
         return self.r.hgetall('tree:{}'.format(username)).keys()
 
     def get_page(self, username, page):
-        page_pk = self.r.hget('tree:{}'.format(username), page)
+        page_pk = str(self.r.hget('tree:{}'.format(username), page))
         if not page_pk:
             return None
         return self.r.get('pages:{}'.format(page_pk))
