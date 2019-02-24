@@ -19,6 +19,7 @@ FROM node:alpine AS frontend-builder
 RUN mkdir /app
 COPY ./frontend /app
 WORKDIR /app
+RUN set -ex && apk add python make g++
 RUN set -ex && yarn && yarn build
 
 # create new container without build dependencies
@@ -36,7 +37,7 @@ WORKDIR /code
 RUN DJANGO_SECRET_KEY=none DEBUG=False python manage.py collectstatic --noinput
 
 COPY --from=frontend-builder /app/dist/static /static
-COPY --from=frontend-builder /app/dist/index.html/ /code/backend/templates
+COPY --from=frontend-builder /app/dist/index.html /code/backend/templates/
 
 EXPOSE 8000
 

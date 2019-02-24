@@ -1,3 +1,5 @@
 Dockerfile
 frontend/node_modules/
 data/
+postgres-data/
+redis-data/

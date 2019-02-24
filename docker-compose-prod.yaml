@@ -15,8 +15,8 @@ services:
     volumes:
       - ./redis-data:/data
 
-  django:
-    image: fotcorn/liveinconcert-backend
+  stormnotes:
+    image: stormnotes/stormnotes:latest
     environment:
       - "DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres"
       - "DJANGO_SECRET_KEY=${SECRET_KEY}"
@@ -24,6 +24,7 @@ services:
       - "REDIS_URL=redis://redis:6379"
     depends_on:
       - postgres
+      - redis
     restart: unless-stopped
 
   caddy:
@@ -32,7 +33,7 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - django
+      - stormnotes
     environment:
       - "DOMAIN=${DOMAIN}"
     volumes:

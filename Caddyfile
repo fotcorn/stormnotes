@@ -1,0 +1,5 @@
+{$DOMAIN} {
+    proxy / stormnotes:8000 {
+        transparent
+    }
+}
