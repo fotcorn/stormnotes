@@ -1,5 +1,8 @@
 <template>
   <el-container>
+    <el-header class="header">
+      <router-link :to="{ name: 'page', params: { page: 'index' } }" class="header-title">Stormnotes</router-link>
+    </el-header>
     <el-main>
       <page-title :title="pageName"/>
       <el-row :gutter="10" style="display: flex">
@@ -118,6 +121,15 @@ export default class Home extends Vue {
 <style lang="sass" scoped>
 .container
   padding: 10px
+
+.header
+  background-color: #00bcd4
+
+.header-title
+  color: rgba(255, 255, 255, 0.87)
+  font-size: 30px
+  line-height: 60px
+  text-decoration: none
 </style>
 
 <style lang="sass">
