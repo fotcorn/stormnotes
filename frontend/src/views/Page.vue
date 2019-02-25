@@ -141,6 +141,9 @@ export default class Home extends Vue {
   height: auto
 
 .html
+  a
+    text-decoration: none
+
   // code block formatting from highlight.js
   pre
     background-color: #F8F8F8

@@ -59,18 +59,19 @@ function linkify(state: any, silent: boolean) {
   state.pos = start + 1;
 
   // Earlier we checked !silent, but this implementation does not need it
-  token = state.push('link_open', 'span', 1);
+  token = state.push('link_open', 'a', 1);
   token.attrs = [
     ['class', 'wiki-page-link'],
     ['data-wiki-page', content],
     ['href', '/wiki/' + content],
+    ['onclick', 'return false;'],
   ];
   token.markup = '^';
 
   token = state.push('text', '', 0);
   token.content = content.replace(UNESCAPE_RE, '$1');
 
-  token = state.push('link_close', 'span', -1);
+  token = state.push('link_close', 'a', -1);
   token.markup = '^';
 
   state.pos = state.posMax + 1;
