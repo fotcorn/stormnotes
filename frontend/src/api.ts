@@ -119,7 +119,8 @@ http.interceptors.request.use(
       // if the refresh is successful, the store now has a valid access token and we can use it to do the request
       // if not, the user will be redirected to the login view
     }
-    config.headers.Authorization = 'Bearer ' + (store.state as any).auth.accessToken;
+    config.headers.Authorization =
+      'Bearer ' + (store.state as any).auth.accessToken;
     return config;
   },
   error => {
@@ -153,8 +154,10 @@ http.interceptors.response.use(
     await tryTokensRefresh();
     // if successful, the store now has a valid access token and we can retry to request with it
     // if not, the user has been redirected to the login view
-
-    return http.request(error.config);
+    return http.request({
+      ...error.config,
+      baseURL: '',
+    });
   }
 );
 
