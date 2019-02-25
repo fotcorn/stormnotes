@@ -105,6 +105,7 @@ export default class Home extends Vue {
   get codeMirrorOptions() {
     return {
       tabSize: 2,
+      lineWrapping: true,
       extraKeys: {
         Tab: 'indentMore',
         'Shift-Tab': 'indentLess',
