@@ -13,7 +13,7 @@
         </el-col>
         <el-col :span="12">
           <el-card class="height100p">
-            <codemirror v-model="markdown" :options="codeMirrorOptions"/>
+            <codemirror v-model="markdown" :options="codeMirrorOptions" ref="editor"/>
           </el-card>
         </el-col>
       </el-row>
@@ -36,54 +36,17 @@ import { codemirror } from 'vue-codemirror';
 })
 export default class Home extends Vue {
   private markdown = '';
+  public pageName = '';
   private dirty = false;
   private interval: number | null = null;
 
   get html() {
-    return renderMarkdown(this.markdown, this.$route.params.page);
-  }
-
-  get pageName() {
-    return this.$route.params.page;
+    return renderMarkdown(this.markdown, this.pageName);
   }
 
   public mounted() {
-    this.init(this.$route.params.page);
-  }
-
-  public async beforeRouteUpdate(to: any, from: any, next: any) {
-    if (this.interval) {
-      window.clearInterval(this.interval);
-    }
-    await this.save(from.params.page);
-    this.init(to.params.page);
-    next();
-  }
-
-  public async beforeRouteLeave(to: any, from: any, next: any) {
-    if (this.interval) {
-      window.clearInterval(this.interval);
-    }
-    await this.save(from.params.page);
-    next();
-  }
-
-  public async init(pageName: string) {
-    let response = null;
-    try {
-      response = await HTTP.get(`/pages/${pageName}/`);
-    } catch (e) {
-      handleAPIError(e);
-      return;
-    }
-    if (response.data.text === null) {
-      this.markdown = '';
-    } else {
-      this.markdown = response.data.text;
-    }
-
-    this.interval = window.setInterval(async () => {
-      await this.save(pageName);
+    window.setInterval(async () => {
+      await this.save();
     }, 2000);
 
     document.querySelector('.html')!.addEventListener('click', event => {
@@ -95,11 +58,40 @@ export default class Home extends Vue {
         }
       }
     });
+
+    this.init(this.$route.params.page);
   }
 
-  public async save(pageName) {
+  public async beforeRouteUpdate(to: any, from: any, next: any) {
+    await this.save();
+    this.init(to.params.page);
+    next();
+  }
+
+  public async beforeRouteLeave(to: any, from: any, next: any) {
+    await this.save();
+    next();
+  }
+
+  public async init(pageName: string) {
+    let response = null;
+    try {
+      response = await HTTP.get(`/pages/${pageName}/`);
+    } catch (e) {
+      handleAPIError(e);
+      return;
+    }
+    this.pageName = pageName;
+    if (response.data.text === null) {
+      this.markdown = '';
+    } else {
+      this.markdown = response.data.text;
+    }
+  }
+
+  public async save() {
     if (this.dirty) {
-      await HTTP.post(`/pages/${pageName}/`, {
+      await HTTP.post(`/pages/${this.pageName}/`, {
         text: this.markdown,
       });
       this.dirty = false;
