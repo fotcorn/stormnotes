@@ -87,6 +87,9 @@ export default class Home extends Vue {
     } else {
       this.markdown = response.data.text;
     }
+    document.getElementsByTagName(
+      'title'
+    )[0].innerHTML = `${pageName} - stormnotes.io`;
   }
 
   public async save() {
