@@ -51,18 +51,20 @@ export default class Home extends Vue {
     this.init(this.$route.params.page);
   }
 
-  public beforeRouteUpdate(to: any, from: any, next: any) {
+  public async beforeRouteUpdate(to: any, from: any, next: any) {
     if (this.interval) {
       window.clearInterval(this.interval);
     }
+    await this.save(from.params.page);
     this.init(to.params.page);
     next();
   }
 
-  public beforeRouteLeave(to: any, from: any, next: any) {
+  public async beforeRouteLeave(to: any, from: any, next: any) {
     if (this.interval) {
       window.clearInterval(this.interval);
     }
+    await this.save(from.params.page);
     next();
   }
 
@@ -81,12 +83,7 @@ export default class Home extends Vue {
     }
 
     this.interval = window.setInterval(async () => {
-      if (this.dirty) {
-        await HTTP.post(`/pages/${pageName}/`, {
-          text: this.markdown,
-        });
-        this.dirty = false;
-      }
+      await this.save(pageName);
     }, 2000);
 
     document.querySelector('.html')!.addEventListener('click', event => {
@@ -98,6 +95,15 @@ export default class Home extends Vue {
         }
       }
     });
+  }
+
+  public async save(pageName) {
+    if (this.dirty) {
+      await HTTP.post(`/pages/${pageName}/`, {
+        text: this.markdown,
+      });
+      this.dirty = false;
+    }
   }
 
   @Watch('markdown')
