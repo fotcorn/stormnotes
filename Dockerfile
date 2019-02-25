@@ -38,6 +38,7 @@ RUN DJANGO_SECRET_KEY=none DEBUG=False python manage.py collectstatic --noinput
 
 COPY --from=frontend-builder /app/dist/static /static
 COPY --from=frontend-builder /app/dist/index.html /code/backend/templates/
+COPY --from=frontend-builder /app/dist/favicon.ico /static/favicon.ico
 
 EXPOSE 8000
 
