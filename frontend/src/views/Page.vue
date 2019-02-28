@@ -35,10 +35,10 @@ import { codemirror } from 'vue-codemirror';
   },
 })
 export default class Home extends Vue {
-  private markdown = '';
+  public markdown = '';
   public pageName = '';
-  private dirty = false;
-  private interval: number | null = null;
+  public dirty = false;
+  public interval: number | null = null;
 
   get html() {
     return renderMarkdown(this.markdown, this.pageName);
