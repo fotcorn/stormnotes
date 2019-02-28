@@ -40,9 +40,15 @@ COPY --from=frontend-builder /app/dist/static /static
 COPY --from=frontend-builder /app/dist/index.html /code/backend/templates/
 COPY --from=frontend-builder /app/dist/favicon.ico /static/favicon.ico
 
+RUN mkdir /uploads
+RUN chown 1000 /uploads
+
+ADD ./deploy/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod a+x /docker-entrypoint.sh
+
 EXPOSE 8000
 
 ENV DEBUG False
 ENV UWSGI_WSGI_FILE=/code/stormnotes/wsgi.py UWSGI_HTTP=:8000 UWSGI_MASTER=1 UWSGI_WORKERS=2 UWSGI_THREADS=8 UWSGI_UID=1000 UWSGI_GID=2000 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
 
-CMD ["/usr/local/bin/uwsgi", "--http-auto-chunked", "--http-keepalive", "--static-map", "/media=/media"]
+CMD ["/docker-entrypoint.sh"]

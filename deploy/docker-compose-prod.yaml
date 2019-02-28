@@ -29,7 +29,7 @@ services:
       - redis
     restart: unless-stopped
     volumes:
-      - ./media/:/media
+      - ./uploads/:/uploads
 
   caddy:
     image: abiosoft/caddy
