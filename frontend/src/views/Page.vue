@@ -4,7 +4,17 @@
       <router-link :to="{ name: 'page', params: { page: 'index' } }" class="header-title">Stormnotes</router-link>
     </el-header>
     <el-main>
-      <page-title :title="pageName"/>
+      <div class="title-container">
+        <page-title :title="pageName"/>
+        <el-upload
+          action="/api/upload/"
+          :show-file-list="false"
+          :http-request="upload"
+          :on-success="uploadSuccess"
+        >
+          <el-button slot="trigger" type="primary">Upload image</el-button>
+        </el-upload>
+      </div>
       <el-row :gutter="10" style="display: flex">
         <el-col :span="12">
           <el-card class="height100p">
@@ -117,6 +127,23 @@ export default class Home extends Vue {
       },
     };
   }
+
+  public async upload(data: any) {
+    const formData = new FormData();
+    const imagefile = document.querySelector('#file');
+    formData.append('file', data.file);
+    return HTTP.post('/upload/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
+
+  public uploadSuccess(response: any) {
+    const doc = (this.$refs.editor as any).codemirror.getDoc();
+    const cursor = doc.getCursor();
+    doc.replaceRange(`![](${response.data.url})`, cursor);
+  }
 }
 </script>
 
@@ -132,6 +159,11 @@ export default class Home extends Vue {
   font-size: 30px
   line-height: 60px
   text-decoration: none
+
+.title-container
+  display: flex
+  justify-content: space-between
+  align-items: center
 </style>
 
 <style lang="sass">

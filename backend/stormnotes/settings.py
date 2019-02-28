@@ -119,6 +119,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = env('MEDIA_ROOT', default='/media')
+
 REST_FRAMEWORK = {
     # all api reviews require authentication by default
     'DEFAULT_PERMISSION_CLASSES': (

@@ -28,6 +28,8 @@ services:
       - postgres
       - redis
     restart: unless-stopped
+    volumes:
+      - ./media/:/media
 
   caddy:
     image: abiosoft/caddy
