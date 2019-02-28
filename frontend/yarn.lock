@@ -3911,6 +3911,11 @@ markdown-it-highlightjs@^3.0.0:
     highlight.js "^9.9.0"
     lodash.flow "^3.1.0"
 
+markdown-it-imsize@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-imsize/-/markdown-it-imsize-2.0.1.tgz#cca0427905d05338a247cb9ca9d968c5cddd5170"
+  integrity sha1-zKBCeQXQUziiR8ucqdloxc3dUXA=
+
 markdown-it-katex@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/markdown-it-katex/-/markdown-it-katex-2.0.3.tgz#d7b86a1aea0b9d6496fab4e7919a18fdef589c39"

@@ -4,6 +4,7 @@ import checkbox from './markdown-it-checkbox';
 import sub from 'markdown-it-sub';
 import sup from 'markdown-it-sup';
 import katex from 'markdown-it-katex';
+import imsize from 'markdown-it-imsize';
 import link from './markdown-it-link';
 
 const md = markdownIt({ breaks: true, linkify: true })
@@ -12,7 +13,8 @@ const md = markdownIt({ breaks: true, linkify: true })
   .use(link)
   .use(sub)
   .use(sup)
-  .use(katex);
+  .use(katex)
+  .use(imsize);
 
 export default function render(markdown: string, currentPage: string): string {
   md.set({ currentPage } as any);
