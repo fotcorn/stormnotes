@@ -27,6 +27,7 @@ import renderMarkdown from '../markdown/markdown';
 import PageTitle from '@/components/PageTitle.vue';
 import HTTP, { handleAPIError } from '@/api';
 import { codemirror } from 'vue-codemirror';
+import 'codemirror/keymap/sublime';
 
 @Component({
   components: {
@@ -110,9 +111,9 @@ export default class Home extends Vue {
     return {
       tabSize: 2,
       lineWrapping: true,
+      keyMap: 'sublime',
       extraKeys: {
         Tab: 'indentMore',
-        'Shift-Tab': 'indentLess',
       },
     };
   }
