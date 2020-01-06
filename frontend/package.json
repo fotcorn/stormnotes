@@ -10,7 +10,7 @@
   "dependencies": {
     "element-ui": "^2.3.6",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "markdown-it": "^8.4.2",
     "markdown-it-highlightjs": "^3.0.0",
     "markdown-it-imsize": "^2.0.1",
