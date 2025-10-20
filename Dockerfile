@@ -12,6 +12,11 @@ RUN yarn build
 # Stage 2: Setup Python backend with uv
 FROM python:3.12-slim AS backend-builder
 
+# Install build dependencies for compiling Python packages (uwsgi, psycopg2-binary, etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
