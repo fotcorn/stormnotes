@@ -1,54 +1,66 @@
-# builder container for django app with build dependencies
-FROM python:3.7-slim AS backend-builder
+# Multi-stage build for production
 
-RUN set -ex \
-    && apt-get update \
-    && apt-get install build-essential --no-install-recommends -y \
-    && pip install pipenv
+# Stage 1: Build frontend with Node.js and Vite
+FROM node:20-alpine AS frontend-builder
 
-ADD ./backend/Pipfile /Pipfile
-ADD ./backend/Pipfile.lock /Pipfile.lock
-
-RUN set -ex \
-    && pipenv install --system --deploy \
-    && pip install uwsgi==2.0.17
-
-# builder container for vue.js frontend app
-FROM node:alpine AS frontend-builder
-
-RUN mkdir /app
-COPY ./frontend /app
 WORKDIR /app
-RUN set -ex && apk add python make g++
-RUN set -ex && yarn && yarn build
+COPY ./frontend/package.json ./frontend/package-lock.json* ./
+RUN npm ci
+COPY ./frontend .
+RUN npm run build
 
-# create new container without build dependencies
-FROM python:3.7-slim
+# Stage 2: Setup Python backend with uv
+FROM python:3.12-slim AS backend-builder
 
-# copy site-packages with compiled binaries from builder container
-COPY --from=backend-builder /usr/local/lib/python3.7/site-packages /usr/local/lib/python3.7/site-packages
-COPY --from=backend-builder /usr/local/bin/uwsgi /usr/local/bin/uwsgi
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# copy code into container
-RUN mkdir /code
-ADD ./backend/ /code/
-
+# Set up Python environment
+ENV UV_SYSTEM_PYTHON=1
 WORKDIR /code
+
+# Copy dependency files
+COPY ./backend/pyproject.toml ./backend/.python-version* ./
+
+# Install dependencies
+RUN uv pip install -r pyproject.toml
+
+# Stage 3: Final production image
+FROM python:3.12-slim
+
+# Copy Python packages from builder
+COPY --from=backend-builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+
+# Copy backend code
+WORKDIR /code
+COPY ./backend/ ./
+
+# Copy built frontend assets
+COPY --from=frontend-builder /app/dist/index.html /code/backend/templates/
+COPY --from=frontend-builder /app/dist/static /static
+COPY --from=frontend-builder /app/public/favicon.ico /static/favicon.ico
+
+# Collect Django static files
 RUN DJANGO_SECRET_KEY=none DEBUG=False python manage.py collectstatic --noinput
 
-COPY --from=frontend-builder /app/dist/static /static
-COPY --from=frontend-builder /app/dist/index.html /code/backend/templates/
-COPY --from=frontend-builder /app/dist/favicon.ico /static/favicon.ico
+# Setup uploads directory
+RUN mkdir -p /uploads && chown 1000:1000 /uploads
 
-RUN mkdir /uploads
-RUN chown 1000 /uploads
-
-ADD ./deploy/docker-entrypoint.sh /docker-entrypoint.sh
+# Add entrypoint script
+COPY ./deploy/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod a+x /docker-entrypoint.sh
 
 EXPOSE 8000
 
-ENV DEBUG False
-ENV UWSGI_WSGI_FILE=/code/stormnotes/wsgi.py UWSGI_HTTP=:8000 UWSGI_MASTER=1 UWSGI_WORKERS=2 UWSGI_THREADS=8 UWSGI_UID=1000 UWSGI_GID=2000 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
+ENV DEBUG=False
+ENV UWSGI_WSGI_FILE=/code/stormnotes/wsgi.py \
+    UWSGI_HTTP=:8000 \
+    UWSGI_MASTER=1 \
+    UWSGI_WORKERS=2 \
+    UWSGI_THREADS=8 \
+    UWSGI_UID=1000 \
+    UWSGI_GID=2000 \
+    UWSGI_LAZY_APPS=1 \
+    UWSGI_WSGI_ENV_BEHAVIOR=holy
 
 CMD ["/docker-entrypoint.sh"]
