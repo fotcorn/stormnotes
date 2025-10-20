@@ -1,23 +1,21 @@
 # docker-compose file for development with django and vue.js running directly on the host
-version: "3"
-
 services:
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     command: redis-server /etc/redis.conf
     ports:
-      # we run redis on a non-standard port to avoid collision with a locally installed postgres
+      # we run redis on a non-standard port to avoid collision with a locally installed redis
       - "6380:6379"
     volumes:
       - ./data/redis:/data
       - ./deploy/redis.conf:/etc/redis.conf
 
   postgres:
-    image: postgres:alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_PASSWORD: unsafe
     volumes:
       - ./data/postgres_dev:/var/lib/postgresql/data
     ports:
       # we run postgres on a non-standard port to avoid collision with a locally installed postgres
-      - 5433:5432
+      - "5433:5432"

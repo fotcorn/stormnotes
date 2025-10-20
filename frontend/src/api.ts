@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { Message } from 'element-ui';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { endsWith } from 'lodash';
 
 import store from '@/store/index';
