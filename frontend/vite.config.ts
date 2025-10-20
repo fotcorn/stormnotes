@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite'
-import { createVuePlugin as vue2 } from 'vite-plugin-vue2'
+import vue from '@vitejs/plugin-vue2'
 import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue2({
+    vue({
       jsx: true,
     }),
   ],
