@@ -16,20 +16,22 @@ FROM python:3.12-slim AS backend-builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Set up Python environment
-ENV UV_SYSTEM_PYTHON=1
 WORKDIR /code
 
 # Copy dependency files
-COPY ./backend/pyproject.toml ./backend/.python-version* ./
+COPY ./backend/pyproject.toml ./backend/uv.lock ./backend/.python-version ./
 
-# Install dependencies (all pure Python wheels, no compilation needed)
-RUN uv pip install -r pyproject.toml
+# Install dependencies using uv sync
+RUN uv sync --frozen --no-dev
 
 # Stage 3: Final production image
 FROM python:3.12-slim
 
-# Copy Python packages from builder
-COPY --from=backend-builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+# Copy Python packages from builder (uv creates a .venv)
+COPY --from=backend-builder /code/.venv /code/.venv
+
+# Add virtualenv to PATH
+ENV PATH="/code/.venv/bin:$PATH"
 
 # Copy backend code
 WORKDIR /code
