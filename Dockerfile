@@ -12,11 +12,6 @@ RUN yarn build
 # Stage 2: Setup Python backend with uv
 FROM python:3.12-slim AS backend-builder
 
-# Install build dependencies for compiling Python packages (uwsgi, psycopg2-binary, etc.)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
@@ -27,7 +22,7 @@ WORKDIR /code
 # Copy dependency files
 COPY ./backend/pyproject.toml ./backend/.python-version* ./
 
-# Install dependencies
+# Install dependencies (all pure Python wheels, no compilation needed)
 RUN uv pip install -r pyproject.toml
 
 # Stage 3: Final production image
@@ -57,15 +52,9 @@ RUN chmod a+x /docker-entrypoint.sh
 
 EXPOSE 8000
 
-ENV DEBUG=False
-ENV UWSGI_WSGI_FILE=/code/stormnotes/wsgi.py \
-    UWSGI_HTTP=:8000 \
-    UWSGI_MASTER=1 \
-    UWSGI_WORKERS=2 \
-    UWSGI_THREADS=8 \
-    UWSGI_UID=1000 \
-    UWSGI_GID=2000 \
-    UWSGI_LAZY_APPS=1 \
-    UWSGI_WSGI_ENV_BEHAVIOR=holy
+ENV DEBUG=False \
+    GUNICORN_WORKERS=2 \
+    GUNICORN_THREADS=4 \
+    GUNICORN_BIND=0.0.0.0:8000
 
 CMD ["/docker-entrypoint.sh"]
