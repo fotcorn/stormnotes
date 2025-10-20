@@ -1,3 +1,0 @@
-[flake8]
-exclude = */migrations/*,manage.py,wsgi.py,.venv/
-max-line-length=120
